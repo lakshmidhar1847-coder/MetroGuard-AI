@@ -3,9 +3,7 @@ services:
     name: metroguard-ai
     runtime: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT"
+    startCommand: "uvicorn backend.main:app --host 0.0.0.0 --port $PORT"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
-      - key: PORT
-        value: 10000
