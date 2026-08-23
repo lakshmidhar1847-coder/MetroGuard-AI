@@ -506,34 +506,56 @@ def get_single_case_study_endpoint(case_id: str):
         raise HTTPException(status_code=404, detail=f"Case study '{case_id}' not found.")
     return cs
 
-# Serve static frontend build and SPA client-side routes
+# =========================================================================
+# STATIC ASSETS & SPA CLIENT-SIDE FALLBACK ROUTING
+# =========================================================================
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 
-dist_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend", "dist")
-if os.path.exists(dist_dir):
-    assets_dir = os.path.join(dist_dir, "assets")
-    if os.path.exists(assets_dir):
-        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+def find_dist_dir():
+    candidates = [
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend", "dist"),
+        os.path.join(os.getcwd(), "frontend", "dist"),
+        os.path.abspath("frontend/dist"),
+        "/app/frontend/dist"
+    ]
+    for c in candidates:
+        if os.path.exists(c) and os.path.isfile(os.path.join(c, "index.html")):
+            return c
+    return candidates[0]
+
+dist_dir = find_dist_dir()
+assets_dir = os.path.join(dist_dir, "assets")
+
+if os.path.exists(assets_dir):
+    app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+@app.get("/")
+async def serve_root():
+    index_file = os.path.join(dist_dir, "index.html")
+    if os.path.exists(index_file):
+        return FileResponse(index_file)
+    return HTMLResponse("<h1>MetroGuard AI</h1><p>Backend is ONLINE. Frontend build not found.</p>", status_code=200)
+
+@app.get("/{full_path:path}")
+async def serve_spa_frontend(full_path: str):
+    # Allow standard API endpoints to return proper 404
+    if full_path.startswith("api/"):
+        raise HTTPException(status_code=404, detail="API route not found")
         
-    @app.get("/{full_path:path}")
-    async def serve_spa_frontend(full_path: str):
-        # Allow standard API endpoints through
-        if full_path.startswith("api/"):
-            raise HTTPException(status_code=404, detail="API route not found")
-            
-        target_file = os.path.join(dist_dir, full_path)
-        if full_path and os.path.isfile(target_file):
-            return FileResponse(target_file)
-            
-        index_file = os.path.join(dist_dir, "index.html")
-        if os.path.exists(index_file):
-            return FileResponse(index_file)
-        raise HTTPException(status_code=404, detail="Frontend index.html not found")
+    target_file = os.path.join(dist_dir, full_path)
+    if full_path and os.path.isfile(target_file):
+        return FileResponse(target_file)
+        
+    index_file = os.path.join(dist_dir, "index.html")
+    if os.path.exists(index_file):
+        return FileResponse(index_file)
+    raise HTTPException(status_code=404, detail="Frontend index.html not found")
 
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
     host = os.environ.get("HOST", "0.0.0.0")
     uvicorn.run("backend.main:app", host=host, port=port, reload=False)
+
 
