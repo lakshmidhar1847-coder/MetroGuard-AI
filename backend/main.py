@@ -527,29 +527,63 @@ def find_dist_dir():
 dist_dir = find_dist_dir()
 assets_dir = os.path.join(dist_dir, "assets")
 
-if os.path.exists(assets_dir):
-    app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+@app.get("/assets/{asset_name:path}")
+async def serve_asset(asset_name: str):
+    """Directly serves compiled JS and CSS frontend assets with guaranteed MIME types."""
+    candidates = [
+        os.path.join(assets_dir, asset_name),
+        os.path.join(dist_dir, "assets", asset_name),
+        os.path.join(os.getcwd(), "frontend", "dist", "assets", asset_name),
+        os.path.abspath(f"frontend/dist/assets/{asset_name}"),
+        f"/app/frontend/dist/assets/{asset_name}"
+    ]
+    for cand in candidates:
+        if os.path.isfile(cand):
+            media_type = "application/javascript" if cand.endswith(".js") else "text/css" if cand.endswith(".css") else None
+            return FileResponse(cand, media_type=media_type)
+    raise HTTPException(status_code=404, detail="Asset not found")
 
 @app.get("/")
 async def serve_root():
-    index_file = os.path.join(dist_dir, "index.html")
-    if os.path.exists(index_file):
-        return FileResponse(index_file)
+    """Serves the root React application."""
+    candidates = [
+        os.path.join(dist_dir, "index.html"),
+        os.path.join(os.getcwd(), "frontend", "dist", "index.html"),
+        os.path.abspath("frontend/dist/index.html"),
+        "/app/frontend/dist/index.html"
+    ]
+    for cand in candidates:
+        if os.path.isfile(cand):
+            return FileResponse(cand)
     return HTMLResponse("<h1>MetroGuard AI</h1><p>Backend is ONLINE. Frontend build not found.</p>", status_code=200)
 
 @app.get("/{full_path:path}")
 async def serve_spa_frontend(full_path: str):
+    """Serves static files or falls back to index.html for client-side SPA routing."""
     # Allow standard API endpoints to return proper 404
     if full_path.startswith("api/"):
         raise HTTPException(status_code=404, detail="API route not found")
         
-    target_file = os.path.join(dist_dir, full_path)
-    if full_path and os.path.isfile(target_file):
-        return FileResponse(target_file)
-        
-    index_file = os.path.join(dist_dir, "index.html")
-    if os.path.exists(index_file):
-        return FileResponse(index_file)
+    candidates = [
+        os.path.join(dist_dir, full_path),
+        os.path.join(os.getcwd(), "frontend", "dist", full_path),
+        os.path.abspath(f"frontend/dist/{full_path}"),
+        f"/app/frontend/dist/{full_path}"
+    ]
+    for cand in candidates:
+        if full_path and os.path.isfile(cand):
+            return FileResponse(cand)
+            
+    index_candidates = [
+        os.path.join(dist_dir, "index.html"),
+        os.path.join(os.getcwd(), "frontend", "dist", "index.html"),
+        os.path.abspath("frontend/dist/index.html"),
+        "/app/frontend/dist/index.html"
+    ]
+    for index_file in index_candidates:
+        if os.path.isfile(index_file):
+            return FileResponse(index_file)
+            
     raise HTTPException(status_code=404, detail="Frontend index.html not found")
 
 if __name__ == "__main__":
@@ -557,5 +591,6 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     host = os.environ.get("HOST", "0.0.0.0")
     uvicorn.run("backend.main:app", host=host, port=port, reload=False)
+
 
 
