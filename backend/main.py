@@ -530,3 +530,10 @@ if os.path.exists(dist_dir):
         if os.path.exists(index_file):
             return FileResponse(index_file)
         raise HTTPException(status_code=404, detail="Frontend index.html not found")
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    host = os.environ.get("HOST", "0.0.0.0")
+    uvicorn.run("backend.main:app", host=host, port=port, reload=False)
+
