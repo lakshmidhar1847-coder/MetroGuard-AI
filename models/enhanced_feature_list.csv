@@ -1,0 +1,55 @@
+Feature,Category,Formula
+TP3_minus_Reservoirs,Relative Pressure,TP3 - Reservoirs
+TP3_abs_diff_Reservoirs,Relative Pressure,|TP3 - Reservoirs|
+TP3_ratio_Reservoirs,Relative Pressure,TP3 / (Reservoirs + eps)
+TP2_minus_H1,Relative Pressure,TP2 - H1 (Cyclonic Filter Drop)
+TP2_abs_diff_H1,Relative Pressure,|TP2 - H1|
+TP3_minus_TP2,Relative Pressure,TP3 - TP2 (Line Pressure Gradient)
+DV_pressure_minus_TP2,Relative Pressure,DV_pressure - TP2
+TP2_dev_mean_5m,Baseline Deviation,TP2 - TP2_roll_mean_5m
+TP2_zscore_5m,Standardized Residual,(TP2 - TP2_roll_mean_5m) / (TP2_roll_std_5m + eps)
+TP2_dev_mean_1m,Baseline Deviation,TP2 - TP2_roll_mean_1m
+TP3_dev_mean_5m,Baseline Deviation,TP3 - TP3_roll_mean_5m
+TP3_zscore_5m,Standardized Residual,(TP3 - TP3_roll_mean_5m) / (TP3_roll_std_5m + eps)
+TP3_dev_mean_1m,Baseline Deviation,TP3 - TP3_roll_mean_1m
+H1_dev_mean_5m,Baseline Deviation,H1 - H1_roll_mean_5m
+H1_zscore_5m,Standardized Residual,(H1 - H1_roll_mean_5m) / (H1_roll_std_5m + eps)
+H1_dev_mean_1m,Baseline Deviation,H1 - H1_roll_mean_1m
+Reservoirs_dev_mean_5m,Baseline Deviation,Reservoirs - Reservoirs_roll_mean_5m
+Reservoirs_zscore_5m,Standardized Residual,(Reservoirs - Reservoirs_roll_mean_5m) / (Reservoirs_roll_std_5m + eps)
+Reservoirs_dev_mean_1m,Baseline Deviation,Reservoirs - Reservoirs_roll_mean_1m
+DV_pressure_dev_mean_5m,Baseline Deviation,DV_pressure - DV_pressure_roll_mean_5m
+DV_pressure_zscore_5m,Standardized Residual,(DV_pressure - DV_pressure_roll_mean_5m) / (DV_pressure_roll_std_5m + eps)
+DV_pressure_dev_mean_1m,Baseline Deviation,DV_pressure - DV_pressure_roll_mean_1m
+Oil_temperature_dev_mean_5m,Baseline Deviation,Oil_temperature - Oil_temperature_roll_mean_5m
+Oil_temperature_zscore_5m,Standardized Residual,(Oil_temperature - Oil_temperature_roll_mean_5m) / (Oil_temperature_roll_std_5m + eps)
+Oil_temperature_dev_mean_1m,Baseline Deviation,Oil_temperature - Oil_temperature_roll_mean_1m
+Motor_current_dev_mean_5m,Baseline Deviation,Motor_current - Motor_current_roll_mean_5m
+Motor_current_zscore_5m,Standardized Residual,(Motor_current - Motor_current_roll_mean_5m) / (Motor_current_roll_std_5m + eps)
+Motor_current_dev_mean_1m,Baseline Deviation,Motor_current - Motor_current_roll_mean_1m
+TP2_vol_ratio_1m_to_5m,Multi-Scale Volatility,TP2_roll_std_1m / (TP2_roll_std_5m + eps)
+TP2_vol_ratio_5m_to_1m,Multi-Scale Volatility,TP2_roll_std_5m / (TP2_roll_std_1m + eps)
+TP3_vol_ratio_1m_to_5m,Multi-Scale Volatility,TP3_roll_std_1m / (TP3_roll_std_5m + eps)
+TP3_vol_ratio_5m_to_1m,Multi-Scale Volatility,TP3_roll_std_5m / (TP3_roll_std_1m + eps)
+H1_vol_ratio_1m_to_5m,Multi-Scale Volatility,H1_roll_std_1m / (H1_roll_std_5m + eps)
+H1_vol_ratio_5m_to_1m,Multi-Scale Volatility,H1_roll_std_5m / (H1_roll_std_1m + eps)
+Reservoirs_vol_ratio_1m_to_5m,Multi-Scale Volatility,Reservoirs_roll_std_1m / (Reservoirs_roll_std_5m + eps)
+Reservoirs_vol_ratio_5m_to_1m,Multi-Scale Volatility,Reservoirs_roll_std_5m / (Reservoirs_roll_std_1m + eps)
+DV_pressure_vol_ratio_1m_to_5m,Multi-Scale Volatility,DV_pressure_roll_std_1m / (DV_pressure_roll_std_5m + eps)
+DV_pressure_vol_ratio_5m_to_1m,Multi-Scale Volatility,DV_pressure_roll_std_5m / (DV_pressure_roll_std_1m + eps)
+Motor_current_vol_ratio_1m_to_5m,Multi-Scale Volatility,Motor_current_roll_std_1m / (Motor_current_roll_std_5m + eps)
+Motor_current_vol_ratio_5m_to_1m,Multi-Scale Volatility,Motor_current_roll_std_5m / (Motor_current_roll_std_1m + eps)
+TP2_cv_5m,Coefficient of Variation,TP2_roll_std_5m / (|TP2_roll_mean_5m| + eps)
+TP2_cv_1m,Coefficient of Variation,TP2_roll_std_1m / (|TP2_roll_mean_1m| + eps)
+TP3_cv_5m,Coefficient of Variation,TP3_roll_std_5m / (|TP3_roll_mean_5m| + eps)
+TP3_cv_1m,Coefficient of Variation,TP3_roll_std_1m / (|TP3_roll_mean_1m| + eps)
+H1_cv_5m,Coefficient of Variation,H1_roll_std_5m / (|H1_roll_mean_5m| + eps)
+H1_cv_1m,Coefficient of Variation,H1_roll_std_1m / (|H1_roll_mean_1m| + eps)
+Reservoirs_cv_5m,Coefficient of Variation,Reservoirs_roll_std_5m / (|Reservoirs_roll_mean_5m| + eps)
+Reservoirs_cv_1m,Coefficient of Variation,Reservoirs_roll_std_1m / (|Reservoirs_roll_mean_1m| + eps)
+DV_pressure_cv_5m,Coefficient of Variation,DV_pressure_roll_std_5m / (|DV_pressure_roll_mean_5m| + eps)
+DV_pressure_cv_1m,Coefficient of Variation,DV_pressure_roll_std_1m / (|DV_pressure_roll_mean_1m| + eps)
+Motor_current_cv_5m,Coefficient of Variation,Motor_current_roll_std_5m / (|Motor_current_roll_mean_5m| + eps)
+Motor_current_cv_1m,Coefficient of Variation,Motor_current_roll_std_1m / (|Motor_current_roll_mean_1m| + eps)
+TP3_per_Current,Electro-Pneumatic Coupling,TP3 / (Motor_current + eps)
+TP2_per_Current,Electro-Pneumatic Coupling,TP2 / (Motor_current + eps)

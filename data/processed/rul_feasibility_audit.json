@@ -1,0 +1,104 @@
+{
+  "scientific_decision": {
+    "verdict": "OUTCOME B \u2014 VALIDATED CONTINUOUS RUL ESTIMATION IS NOT FEASIBLE WITH CURRENT DATA",
+    "outcome_code": "OUTCOME_B",
+    "is_continuous_rul_feasible": false,
+    "summary": "MetroGuard AI definitively concludes that continuous Remaining Useful Life (RUL) regression cannot be validated with scientific defensibility on MetroPT-3 due to extreme sample scarcity (N=4 failure cycles) and failure mode heterogeneity. Instead of presenting a fabricated countdown, MetroGuard provides validated graduated risk classification, anomaly severity indices, persistence tracking, and evidence-backed prescriptive actions."
+  },
+  "dataset_audit": {
+    "monitored_unit": "APU-TR-03 (Single Urban Rail Compressor)",
+    "telemetry_rows": 1486994,
+    "telemetry_date_span": "2020-02-01 to 2020-09-01 (213 days)",
+    "total_failure_episodes": 4,
+    "effective_sample_size": "N = 4 independent failure cycles",
+    "partition_distribution": {
+      "train_events": 2,
+      "validation_events": 1,
+      "final_test_events": 1
+    }
+  },
+  "failure_events": [
+    {
+      "event_id": "Event #1",
+      "failure_timestamp": "2020-04-18 00:00:00",
+      "pre_failure_start": "2020-04-17 23:30:00",
+      "partition": "TRAIN",
+      "duration_minutes": 30.0,
+      "observation_count": 149,
+      "mechanism": "Air Leak / Solenoid Valve Failure (Spring)",
+      "oil_temp_monotonicity_spearman": 0.0,
+      "h1_drop_monotonicity_spearman": 0.0
+    },
+    {
+      "event_id": "Event #2",
+      "failure_timestamp": "2020-05-29 23:30:00",
+      "pre_failure_start": "2020-05-29 23:00:00",
+      "partition": "TRAIN",
+      "duration_minutes": 30.0,
+      "observation_count": 182,
+      "mechanism": "Recurring Air Leak / Moisture Drain Valve (Late Spring)",
+      "oil_temp_monotonicity_spearman": 0.701,
+      "h1_drop_monotonicity_spearman": -0.879
+    },
+    {
+      "event_id": "Event #3",
+      "failure_timestamp": "2020-06-05 10:00:00",
+      "pre_failure_start": "2020-06-05 09:30:00",
+      "partition": "VALIDATION",
+      "duration_minutes": 30.0,
+      "observation_count": 182,
+      "mechanism": "Pneumatic Control Panel Leak (Early Summer)",
+      "oil_temp_monotonicity_spearman": 0.529,
+      "h1_drop_monotonicity_spearman": -0.554
+    },
+    {
+      "event_id": "Event #4",
+      "failure_timestamp": "2020-07-15 14:30:00",
+      "pre_failure_start": "2020-07-15 14:00:00",
+      "partition": "FINAL TEST",
+      "duration_minutes": 30.0,
+      "observation_count": 181,
+      "mechanism": "Extreme Summer Thermal Load + Air Leak (Mid-Summer)",
+      "oil_temp_monotonicity_spearman": 0.058,
+      "h1_drop_monotonicity_spearman": -0.292
+    }
+  ],
+  "limiting_factors": [
+    "Extreme Sample Scarcity: The dataset contains only N=4 discrete failure cycles across 6 months on a single train unit (APU-TR-03). Treating N=2 training events as sufficient for continuous RUL regression violates statistical validity.",
+    "Failure Mode Heterogeneity: Events #1 & #2 are spring pneumatic valve leaks; Event #4 occurred under extreme summer thermal stress (Oil Temp 81.4\u00b0C vs 58.7\u00b0C baseline). Trajectories do not follow a uniform degradation physics.",
+    "Abrupt vs Monotonic Degradation: Pneumatic solenoid valves exhibit discrete pressure drops over 30 minutes rather than gradual multi-week mechanical wear (low Spearman monotonicity across cycles).",
+    "Unlogged Depot Maintenance: Repair completion timestamps, component overhauls, and oil replacements were not recorded with ground-truth metadata in UCI #791."
+  ],
+  "verified_system_capabilities": [
+    {
+      "capability": "Early Failure Risk Assessment",
+      "description": "Graduated probability of failure within 30 minutes via frozen supervised XGBoost (100% recall on spring failures).",
+      "status": "VALIDATED & ACTIVE"
+    },
+    {
+      "capability": "Calibrated Anomaly Severity",
+      "description": "Piecewise normalized 0\u2013100 severity index derived from 99th/99.5th training percentiles via Isolation Forest (33.15% recall on summer holdout).",
+      "status": "VALIDATED & ACTIVE"
+    },
+    {
+      "capability": "Physical Baseline Deviation Tracking",
+      "description": "Real-time statistical Z-score attribution on 65 telemetry features relative to verified normal operating medians.",
+      "status": "VALIDATED & ACTIVE"
+    },
+    {
+      "capability": "Multi-Window Trajectory & Persistence",
+      "description": "Classifies anomaly progression (Worsening, Stable, Recovering) and validates temporal persistence (\u22653 anomalies in 5-min window).",
+      "status": "VALIDATED & ACTIVE"
+    },
+    {
+      "capability": "Prescriptive Maintenance Workflows",
+      "description": "Evidence-backed maintenance directives with priority mapping and interactive 4-point inspection checklists.",
+      "status": "VALIDATED & ACTIVE"
+    },
+    {
+      "capability": "Continuous RUL Countdown Estimation",
+      "description": "Exact hours/minutes remaining until machine failure.",
+      "status": "NOT SUPPORTED (INSUFFICIENT INDEPENDENT CYCLES)"
+    }
+  ]
+}
